@@ -5,7 +5,6 @@ import numpy as np
 from house_prices_ml_foundations.models.champion import build_champion_pipeline
 
 
-
 def test_build_champion_pipeline_fit_predict(mini_train_xy):
     X, y = mini_train_xy
     pipe, _ = build_champion_pipeline(None)
