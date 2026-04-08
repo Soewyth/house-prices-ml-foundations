@@ -1,0 +1,39 @@
+# Datasets
+datasets/raw/
+datasets/processed/
+
+# Outputs
+outputs/**
+!outputs/figures/
+!outputs/figures/**
+
+# MLflow
+mlruns/
+outputs/mlruns/
+
+# Model artifacts
+outputs/models/
+outputs/submissions/
+outputs/reports/
+
+# Virtual environments
+.venv/
+venv/
+.env
+.env.*
+
+# IDE / OS
+.vscode/
+.DS_Store
+*.log
+
+# Python cache
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Build
+dist/
+build/
+*.egg-info/
