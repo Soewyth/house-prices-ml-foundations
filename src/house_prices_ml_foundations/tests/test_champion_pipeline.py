@@ -1,21 +1,9 @@
 import json
 
 import numpy as np
-import pytest
 
-from house_prices_ml_foundations.config.paths import get_project_root
-from house_prices_ml_foundations.data.load import load_train_test
-from house_prices_ml_foundations.features.build import make_features
 from house_prices_ml_foundations.models.champion import build_champion_pipeline
 
-
-@pytest.fixture
-def mini_train_xy():
-    root_dir = get_project_root()
-    train_df, _ = load_train_test(root_dir)
-    sample = train_df.head(20).copy()
-    X, y = make_features(sample, return_target=True)
-    return X, y
 
 
 def test_build_champion_pipeline_fit_predict(mini_train_xy):
