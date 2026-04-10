@@ -49,33 +49,3 @@ def predict(request: PredictRequest):
         raise HTTPException(status_code=400, detail=f"Invalid value: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}")
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Retour JSON = { "predictions": [..] }
-# Indices “pro”
-# Charger le modèle au démarrage (lazy-load ok mais pas à chaque requête)
-# Chemin modèle : outputs/models/champion.joblib via get_paths(get_project_root())
-# Gérer erreurs : si colonnes manquantes → HTTP 400 avec message clair
-
-# ✅ Tu me renvoies :
-
-# la sortie uvicorn ... qui démarre
-# un curl (ou httpie) sur /health
-# un curl sur /predict (2 lignes de test)
