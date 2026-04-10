@@ -27,7 +27,6 @@ graphql-relay==3.2.0
 greenlet==3.3.2
 gunicorn==25.3.0
 h11==0.16.0
--e git+ssh://git@github.com/Soewyth/house-prices-ml-foundations.git@0bb08f00982b872f3c69022ebaf932609ed5fb2c#egg=house_prices_ml_foundations
 huey==2.6.0
 idna==3.11
 importlib_metadata==8.7.1
