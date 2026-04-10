@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import mlflow
 
 from house_prices_ml_foundations.config.mlflow_config import MLFLOW_TRACKING_URI
@@ -15,6 +17,7 @@ from house_prices_ml_foundations.io.run_id import make_run_id
 from house_prices_ml_foundations.mlops.mlflow_tracking import (
     configure_mlflow,
     log_artifact_if_exists,
+    log_metrics,
     log_model,
     log_params,
     set_tags,
@@ -30,11 +33,11 @@ def main() -> None:
     consistent with the model that is actually exported as champion.joblib."""
 
     configure_mlflow(
-        experiment_name="house-prices-experiment", tracking_uri=MLFLOW_TRACKING_URI
+        experiment_name="house-prices-champion", tracking_uri=MLFLOW_TRACKING_URI
     )
     print(f"TRACKING URI MLFLOW : {mlflow.get_tracking_uri()}")
 
-    run_id = make_run_id(tag="champion_")
+    run_id = make_run_id(tag="champion")
     root_dir = get_project_root()
     paths = get_paths(root_dir)
     # Paths for local files (not MLflow artifacts)
@@ -54,10 +57,22 @@ def main() -> None:
     save_model(pipe, versioned_model_path)
     save_model(pipe, stable_model_path)
 
+    # Holdout metrics (computed in script 04) — logged for traceability, not recomputed here
+    latest_holdout_json = latest_file(report_path, "rf_final_holdout_*.json")
+    with open(latest_holdout_json) as f:
+        holdout_report = json.load(f)
+
+    metrics = {
+        "holdout_mae": holdout_report["holdout"]["mae"],
+        "holdout_rmse": holdout_report["holdout"]["rmse"],
+        "holdout_r2": holdout_report["holdout"]["r2"],
+    }
+
     # create dict of param to log in MLflow
     params = {
         "run_id": run_id,
         "champion_source": champion_source,
+        "metrics_source": "script_04_holdout",
         **{k: v for k, v in pipe.get_params().items() if k.startswith("model__")},
     }
 
@@ -72,6 +87,8 @@ def main() -> None:
         })
         # metadata
         log_params(params=params)
+        # Metrics (from holdout evaluation — script 04)
+        log_metrics(metrics=metrics)
         # Artifacts
         latest_report = latest_file(report_path, "REPORT_*.md")
         if latest_report is not None:

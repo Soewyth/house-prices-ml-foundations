@@ -15,7 +15,7 @@ services:
       mlflow:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -25,13 +25,14 @@ services:
   mlflow:
     image: ghcr.io/mlflow/mlflow:v3.10.1
     container_name: house-prices-mlflow
+    user: "${DOCKER_UID:-1000}:${DOCKER_GID:-1000}"
     ports:
       - "5000:5000"
     volumes:
       - ./outputs/mlruns:/mlruns
-    command: mlflow ui --host 0.0.0.0 --port 5000 --backend-store-uri file:///mlruns
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri file:///mlruns --artifacts-destination /mlruns --serve-artifacts
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"]
       interval: 30s
       timeout: 5s
       retries: 3
