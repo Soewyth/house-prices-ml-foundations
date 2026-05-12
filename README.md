@@ -3,6 +3,13 @@
 Price regression of housing sales (Kaggle House Prices).  
 Stack : Python 3.12 · scikit-learn · FastAPI · MLflow · Docker.
 
+
+## What this project demonstrates
+
+- End-to-end regression pipeline: preprocessing, model selection, hyperparameter tuning, and error analysis
+- MLOps practices: experiment tracking (MLflow), REST API serving (FastAPI), containerization (Docker)
+- Structured ML project layout (src/, scripts/, outputs/, Makefile, compose.yaml)
+
 ---
 
 ## Prerequisites
